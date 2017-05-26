@@ -16,13 +16,13 @@ public class Positions {
         List<String> linePositions = Arrays.asList(getTextFromFile(name).split("\n"));
 
         linePositions.stream().forEach(lp -> {
-            List<String> line = Arrays.asList(lp.split(";"));
-            Map<String, Integer> lineHash = line.stream().filter(e -> !e.equalsIgnoreCase(line.get(0))).collect(Collectors.toMap(
+            List<String> line = Arrays.asList(lp.split(":")[1].split(";"));
+            Map<String, Integer> lineHash = line.stream().filter(e -> !e.equalsIgnoreCase(lp.split(":")[0])).collect(Collectors.toMap(
                     e -> e.split("\\(")[0],
                     e -> Integer.parseInt(e.split("\\(")[1].replaceAll("\\)", ""))
             ));
 
-            positionList.add(new Position(line.get(0), lineHash));
+            positionList.add(new Position(lp.split(":")[0], lineHash));
         });
 
     }
