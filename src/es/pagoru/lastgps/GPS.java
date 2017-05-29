@@ -4,15 +4,19 @@ import java.io.FileInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Positions {
+public class GPS {
 
-    private static List<Position> positionList = new ArrayList<>();
+    private List<Node> positionList = new ArrayList<>();
 
-    public static Position getPosition(String name) {
+    public Node getNode(String name) {
         return positionList.stream().filter(pl -> pl.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
-    public static void loadGPS(String name){
+    public GPS(String name){
+        loadGPS(name);
+    }
+
+    private void loadGPS(String name){
         List<String> linePositions = Arrays.asList(getTextFromFile(name).split("\n"));
 
         linePositions.stream().forEach(lp -> {
@@ -22,12 +26,12 @@ public class Positions {
                     e -> Integer.parseInt(e.split("\\(")[1].replaceAll("\\)", ""))
             ));
 
-            positionList.add(new Position(lp.split(":")[0], lineHash));
+            positionList.add(new Node(lp.split(":")[0], lineHash, this));
         });
 
     }
 
-    private static String getTextFromFile(String fileName){
+    private String getTextFromFile(String fileName){
 
         String text = "";
         try {
